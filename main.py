@@ -1,6 +1,10 @@
+from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
+import dotenv
+
+load_dotenv()
 
 
 class State(BaseModel):
@@ -41,7 +45,6 @@ graph = builder.compile(checkpointer=memory, interrupt_before=["human_feedback"]
 
 graph.get_graph().draw_mermaid_png(output_file_path="graph.png")
 
-
 if __name__ == "__main__":
     # the thread_id is like a conversation_id or session_id
     # helps us to differentiate runs of our graph
@@ -63,4 +66,3 @@ if __name__ == "__main__":
 
     for event in graph.stream(initial_input, thread, stream_mode="values"):
         print(event)
-
